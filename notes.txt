@@ -1,0 +1,20 @@
+prompt chaining, tool-calling and statement calling
+
+receives goal and deicdes waht to do next. keeps relevan context, and repeast until it reaches a stopping conditiin.
+
+StateGraph in LangGraph4j. SimpleState in LangGraph4j
+
+- Distributed computing 
+- CAP Themorem = Consistency, Availability, Partitions Tolerance
+
+- - -
+AI system design - Though Defition of CAP here: Cost, Accuracy, Performance
+
+coordinate the activities of multiple agents
+
+A2A protocol
+
+AutoGen library
+
+Coder Agent , Critic Agent
+

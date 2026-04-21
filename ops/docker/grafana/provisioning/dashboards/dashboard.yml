@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: Trackable Agents
+    orgId: 1
+    folder: Trackable Agents
+    type: file
+    updateIntervalSeconds: 10
+    options:
+      path: /var/lib/grafana/dashboards
+

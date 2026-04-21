@@ -1,0 +1,22 @@
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+.env
+.env.*
+volumes/
+logs/
+artifacts/
+tmp/
+
+apps/control-plane/target/
+apps/control-plane/.mvn/wrapper/maven-wrapper.jar
+
+*.log
+*.sqlite
+*.db
+
+# Runtime data must never be committed.
+ops/docker/data/
+

@@ -1,42 +1,16 @@
 #!/usr/bin/env python3
-import json
 import os
 import sys
-import uuid
-from datetime import datetime, timezone
-from urllib.request import Request, urlopen
+
+from pathlib import Path
 
 
-def now_iso():
-    return datetime.now(timezone.utc).isoformat()
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 
-
-def main():
-    payload = json.load(sys.stdin) if not sys.stdin.isatty() else {}
-    event = {
-        "eventId": str(uuid.uuid4()),
-        "occurredAt": now_iso(),
-        "receivedAt": now_iso(),
-        "traceId": payload.get("traceId"),
-        "sessionId": os.getenv("CLAUDE_SESSION_ID"),
-        "runId": os.getenv("CLAUDE_RUN_ID", os.getenv("AGENT_RUN_ID")),
-        "taskId": payload.get("taskId"),
-        "source": "claude",
-        "agentRole": os.getenv("AGENT_ROLE", "implementation"),
-        "eventType": payload.get("eventType", "prompt.submitted"),
-        "summary": payload.get("summary", "Claude hook event"),
-        "payload": payload,
-        "artifactRefs": payload.get("artifactRefs", []),
-        "idempotencyKey": payload.get("idempotencyKey", f"claude:{uuid.uuid4()}")
-    }
-
-    body = json.dumps(event).encode("utf-8")
-    url = os.getenv("AGENT_CONTROL_PLANE_URL", "http://localhost:8080") + "/api/v1/events"
-    request = Request(url, data=body, headers={"Content-Type": "application/json"}, method="POST")
-    with urlopen(request) as response:
-        sys.stdout.write(response.read().decode("utf-8"))
+from hooks.shared.emit_event import main  # noqa: E402
 
 
 if __name__ == "__main__":
+    os.environ.setdefault("TRACKABLE_SOURCE", "claude")
     main()
-

@@ -40,6 +40,23 @@ cd apps/control-plane
 - Grafana: `http://localhost:3000`
 - Health: `http://localhost:8080/actuator/health`
 
+## Local tracking hooks
+
+This repo now includes repo-local hook configs for both tools:
+
+- Codex: `.codex/hooks.json`
+- Claude Code: `.claude/settings.json`
+
+They send lifecycle events to the local control plane at `http://localhost:8080/api/v1/events`.
+
+Notes:
+
+- Run Codex or Claude Code from inside this repository so the repo-local hook config is discovered.
+- Keep the control plane running while you work.
+- The hook emitter is intentionally non-blocking. If the tracking service is down, your agent session continues and the hook only writes a warning to stderr.
+- Claude Code project hooks are committed in `.claude/settings.json`, which follows the current Claude Code project-hook location.
+- Codex project hooks are committed in `.codex/hooks.json`, which follows the current Codex repo-local hook location.
+
 ## GitHub bootstrap
 
 Initialize and publish the repo after reviewing the generated files:
@@ -50,4 +67,3 @@ git add .
 git commit -m "Initial passive observability platform"
 gh repo create trackable_agents --public --source=. --remote=origin --push
 ```
-

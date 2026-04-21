@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -50,5 +51,24 @@ public class ArtifactStorageService {
             artifactRecordRepository.save(entity);
         }
     }
-}
 
+    public int clearRuntimeArtifacts() {
+        Path root = Path.of(properties.getStorage().getArtifactRoot()).normalize();
+        if (Files.notExists(root)) {
+            return 0;
+        }
+
+        try (var paths = Files.walk(root)) {
+            List<Path> toDelete = paths
+                .filter(path -> !path.equals(root))
+                .sorted(Comparator.reverseOrder())
+                .toList();
+            for (Path path : toDelete) {
+                Files.deleteIfExists(path);
+            }
+            return toDelete.size();
+        } catch (IOException exception) {
+            throw new IllegalStateException("Unable to clear artifact root at " + root, exception);
+        }
+    }
+}

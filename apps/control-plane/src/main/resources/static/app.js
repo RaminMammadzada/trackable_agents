@@ -6,6 +6,12 @@ async function fetchJson(url, options = {}) {
   return response.json();
 }
 
+function setAdminStatus(message, isError = false) {
+  const node = document.getElementById("adminStatus");
+  node.textContent = message;
+  node.className = isError ? "status error" : "status";
+}
+
 function statCard(label, value) {
   return `<div class="stat"><div class="muted">${label}</div><strong>${value}</strong></div>`;
 }
@@ -111,8 +117,28 @@ async function refreshAll() {
   await Promise.all([loadSummary(), loadRuns(), loadFailures(), loadLessons()]);
 }
 
+async function postAdminAction(url, confirmText = null) {
+  if (confirmText && !window.confirm(confirmText)) {
+    return;
+  }
+  setAdminStatus("Working...");
+  try {
+    const result = await fetchJson(url, { method: "POST" });
+    const counts = result.counts
+      ? Object.entries(result.counts).map(([key, value]) => `${key}: ${value}`).join(" · ")
+      : "";
+    setAdminStatus(counts ? `${result.message} ${counts}` : result.message);
+    await refreshAll();
+  } catch (error) {
+    setAdminStatus(error.message, true);
+  }
+}
+
 document.getElementById("refreshRuns").addEventListener("click", refreshAll);
+document.getElementById("seedDemo").addEventListener("click", () => postAdminAction("/api/v1/admin/demo/seed"));
+document.getElementById("resetRuntime").addEventListener("click", () =>
+  postAdminAction("/api/v1/admin/runtime/reset", "Clear all local runtime data and demo events?")
+);
 refreshAll().catch(error => {
   document.getElementById("runDetail").innerHTML = `<div class="empty">${error.message}</div>`;
 });
-

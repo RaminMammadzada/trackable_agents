@@ -13,6 +13,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -73,5 +74,25 @@ class EventIngestIntegrationTest {
             .andExpect(jsonPath("$.run.failureCount", equalTo(1)))
             .andExpect(jsonPath("$.events[0].payload.token", equalTo("[REDACTED]")));
     }
-}
 
+    @Test
+    void seedsAndResetsRuntimeData() throws Exception {
+        mockMvc.perform(post("/api/v1/admin/demo/seed"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.action", equalTo("seed-demo-data")))
+            .andExpect(jsonPath("$.counts.eventsCreated", equalTo(13)));
+
+        mockMvc.perform(get("/api/v1/runs"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(3)));
+
+        mockMvc.perform(post("/api/v1/admin/runtime/reset"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.action", equalTo("reset-runtime-data")))
+            .andExpect(jsonPath("$.counts.runsDeleted", equalTo(3)));
+
+        mockMvc.perform(get("/api/v1/runs"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(0)));
+    }
+}

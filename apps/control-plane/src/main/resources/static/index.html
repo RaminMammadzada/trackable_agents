@@ -17,6 +17,30 @@
   </header>
 
   <main class="layout">
+    <section class="panel panel-wide">
+      <div class="panel-header">
+        <h2>Local Admin</h2>
+        <span class="muted">Single-admin runtime controls</span>
+      </div>
+      <div class="admin-grid">
+        <div class="card">
+          <strong>Demo Dataset</strong>
+          <p class="muted">Seed three representative runs so you can verify the UI, failures, lessons, and Copilot/GitHub reconstruction immediately.</p>
+          <button id="seedDemo">Load Demo Data</button>
+        </div>
+        <div class="card">
+          <strong>Reset Runtime Data</strong>
+          <p class="muted">Clear ingested events, projections, failures, lessons, and local artifact files without touching the repo or migrations.</p>
+          <button id="resetRuntime" class="danger-button">Clear Local Data</button>
+        </div>
+        <div class="card">
+          <strong>Live Hooks</strong>
+          <p class="muted">Project-local Claude and Codex hooks are already configured. Start a fresh session in this repo and refresh the dashboard.</p>
+          <div id="adminStatus" class="empty">No admin action has run yet.</div>
+        </div>
+      </div>
+    </section>
+
     <section class="panel">
       <div class="panel-header">
         <h2>Runs</h2>
@@ -51,4 +75,3 @@
   <script src="/app.js"></script>
 </body>
 </html>
-

@@ -49,6 +49,20 @@ This repo now includes repo-local hook configs for both tools:
 
 They send lifecycle events to the local control plane at `http://localhost:8080/api/v1/events`.
 
+## Local admin controls
+
+The dashboard now includes a `Local Admin` panel for fast verification:
+
+- `Load Demo Data` seeds three representative runs covering Codex success, Claude failure plus lesson proposal, and Copilot/GitHub PR activity.
+- `Clear Local Data` deletes runtime data only: ingested events, projections, failures, lessons, and local artifact files.
+
+You can also trigger the same actions from the terminal:
+
+```bash
+./scripts/seed-demo-data.sh
+./scripts/reset-runtime-data.sh
+```
+
 Notes:
 
 - Run Codex or Claude Code from inside this repository so the repo-local hook config is discovered.

@@ -66,6 +66,11 @@ h1, h2 {
   min-height: 22rem;
 }
 
+.panel-wide {
+  grid-column: 1 / -1;
+  min-height: auto;
+}
+
 .panel-header {
   display: flex;
   justify-content: space-between;
@@ -94,6 +99,11 @@ h1, h2 {
   cursor: pointer;
 }
 
+.danger-button {
+  background: rgba(251, 113, 133, 0.12);
+  border-color: rgba(251, 113, 133, 0.35);
+}
+
 .stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(7rem, 1fr));
@@ -110,6 +120,12 @@ h1, h2 {
 
 .muted {
   color: var(--muted);
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
 }
 
 .pill {
@@ -134,6 +150,15 @@ h1, h2 {
   color: var(--muted);
 }
 
+.status {
+  color: var(--accent);
+  line-height: 1.5;
+}
+
+.status.error {
+  color: var(--danger);
+}
+
 pre {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -155,5 +180,8 @@ pre {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     min-width: auto;
   }
-}
 
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}

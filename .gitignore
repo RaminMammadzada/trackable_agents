@@ -16,7 +16,8 @@ apps/control-plane/.mvn/wrapper/maven-wrapper.jar
 *.log
 *.sqlite
 *.db
+__pycache__/
+*.pyc
 
 # Runtime data must never be committed.
 ops/docker/data/
-

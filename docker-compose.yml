@@ -13,9 +13,12 @@ services:
       - "8080:8080"
     volumes:
       - ./artifacts:/data/artifacts
+    restart: on-failure
     depends_on:
-      - postgres
-      - otel-collector
+      postgres:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
 
   postgres:
     image: postgres:16
@@ -28,6 +31,11 @@ services:
       - "5432:5432"
     volumes:
       - ./ops/docker/data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U trackable_agents -d trackable_agents"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
 
   tempo:
     image: grafana/tempo:2.7.2

@@ -48,6 +48,20 @@ services:
     ports:
       - "3200:3200"
 
+  prometheus:
+    image: prom/prometheus:v3.4.1
+    container_name: trackable-agents-prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    volumes:
+      - ./ops/docker/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./ops/docker/data/prometheus:/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - control-plane
+
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.126.0
     container_name: trackable-agents-otel
@@ -75,3 +89,4 @@ services:
       - ./ops/docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       - tempo
+      - prometheus

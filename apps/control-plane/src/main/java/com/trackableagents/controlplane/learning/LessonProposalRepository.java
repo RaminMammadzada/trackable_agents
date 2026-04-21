@@ -7,5 +7,5 @@ import java.util.List;
 public interface LessonProposalRepository extends JpaRepository<LessonProposalEntity, String> {
     List<LessonProposalEntity> findTop100ByOrderByCreatedAtDesc();
     List<LessonProposalEntity> findByRunIdOrderByCreatedAtDesc(String runId);
+    long countByStatus(String status);
 }
-

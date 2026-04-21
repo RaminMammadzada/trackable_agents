@@ -9,5 +9,5 @@ public interface FailureRecordRepository extends JpaRepository<FailureRecordEnti
     List<FailureRecordEntity> findTop100ByOrderByCreatedAtDesc();
     List<FailureRecordEntity> findByRunIdOrderByCreatedAtDesc(String runId);
     Optional<FailureRecordEntity> findByEventId(String eventId);
+    long countByStatus(String status);
 }
-

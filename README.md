@@ -24,7 +24,7 @@ Trackable Agents is a passive observability platform for agent-assisted developm
 1. Start infrastructure:
 
 ```bash
-docker compose up -d postgres otel-collector grafana tempo
+docker compose up -d postgres otel-collector tempo prometheus grafana
 ```
 
 2. Run the control plane:
@@ -38,6 +38,7 @@ cd apps/control-plane
 
 - App UI: `http://localhost:8080`
 - Grafana: `http://localhost:3000`
+- Prometheus: `http://localhost:9090`
 - Health: `http://localhost:8080/actuator/health`
 
 ## Local tracking hooks
@@ -61,6 +62,21 @@ You can also trigger the same actions from the terminal:
 ```bash
 ./scripts/seed-demo-data.sh
 ./scripts/reset-runtime-data.sh
+```
+
+## Grafana and telemetry
+
+Grafana is provisioned with:
+
+- `Prometheus` for application and domain metrics
+- `Tempo` for trace lookup
+
+If the Grafana board looks stale after infrastructure changes, rebuild the stack and reseed demo data:
+
+```bash
+docker compose up -d --build
+./scripts/reset-runtime-data.sh
+./scripts/seed-demo-data.sh
 ```
 
 Notes:

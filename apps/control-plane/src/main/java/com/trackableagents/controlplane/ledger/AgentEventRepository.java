@@ -9,5 +9,5 @@ public interface AgentEventRepository extends JpaRepository<AgentEventEntity, St
     Optional<AgentEventEntity> findByIdempotencyKey(String idempotencyKey);
     List<AgentEventEntity> findByRunIdOrderByOccurredAtAscReceivedAtAscEventIdAsc(String runId);
     List<AgentEventEntity> findTop200ByOrderByOccurredAtDescReceivedAtDesc();
+    long countBySource(String source);
 }
-
